@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mental Math — 20 Question Challenge</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172036;
+      --muted: #687189;
+      --paper: #fffdf8;
+      --page: #eaf2ff;
+      --accent: #3157d5;
+      --accent-dark: #2444ad;
+      --accent-soft: #edf1ff;
+      --correct: #16734a;
+      --correct-soft: #e9f8f1;
+      --incorrect: #b42332;
+      --incorrect-soft: #fff0f1;
+      --line: #d9dfeb;
+      --gold: #f3ad22;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      overflow-x: hidden;
+      background: var(--page);
+      color: var(--ink);
+      font-family: Inter, ui-rounded, "Segoe UI", system-ui, sans-serif;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 720px);
+      padding: clamp(26px, 6vw, 50px);
+      border: 1px solid rgba(23, 32, 54, 0.08);
+      border-radius: 28px;
+      background: var(--paper);
+      box-shadow: 0 24px 60px rgba(49, 87, 213, 0.14);
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 0;
+      font-size: clamp(2rem, 8vw, 3.25rem);
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin-bottom: 12px;
+      font-size: clamp(1.7rem, 6vw, 2.45rem);
+      letter-spacing: -0.035em;
+    }
+
+    h3 {
+      margin-bottom: 14px;
+      font-size: 1.15rem;
+    }
+
+    .hint {
+      margin: 10px 0 28px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .primary-button,
+    .secondary-button,
+    input {
+      min-height: 58px;
+      border-radius: 14px;
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font-weight: 800;
+      transition: background 140ms ease, transform 100ms ease, box-shadow 140ms ease;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    summary:focus-visible {
+      outline: 4px solid rgba(49, 87, 213, 0.22);
+      outline-offset: 3px;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .primary-button {
+      background: var(--accent);
+      color: #ffffff;
+      padding: 0 28px;
+      box-shadow: 0 9px 20px rgba(49, 87, 213, 0.2);
+    }
+
+    .primary-button:hover {
+      background: var(--accent-dark);
+    }
+
+    .secondary-button {
+      min-height: 46px;
+      padding: 0 18px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+    }
+
+    .secondary-button:hover {
+      border-color: #b7c2d7;
+      background: #f8faff;
+    }
+
+    .start-button {
+      width: min(100%, 260px);
+      font-size: 1.12rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 28px auto 0;
+      width: min(100%, 390px);
+    }
+
+    .stat-card {
+      padding: 16px 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+
+    .stat-value {
+      display: block;
+      color: var(--accent);
+      font-size: 1.55rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-label {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .history {
+      margin-top: 24px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+      text-align: left;
+    }
+
+    .history summary {
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 8px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      background: #f6f8fc;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .history-score {
+      color: var(--ink);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .history-actions {
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .small-button {
+      min-height: 38px;
+      padding: 0 14px;
+      font-size: 0.83rem;
+    }
+
+    .save-note {
+      min-height: 1.3em;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .save-note.warning {
+      color: var(--incorrect);
+      font-weight: 700;
+    }
+
+    .game-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+
+    .progress-text {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 11px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #dfe6f5;
+    }
+
+    .progress-bar {
+      width: 5%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width 220ms ease;
+    }
+
+    .problem {
+      min-height: 1.35em;
+      margin: 0 0 28px;
+      font-size: clamp(2.25rem, 10vw, 4.5rem);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+
+    input {
+      width: 100%;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      padding: 8px 18px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+      transition: border-color 140ms ease, box-shadow 140ms ease;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(49, 87, 213, 0.13);
+    }
+
+    input:disabled {
+      opacity: 0.72;
+    }
+
+    .feedback {
+      min-height: 1.5em;
+      margin: 22px 0 0;
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .feedback.correct {
+      color: var(--correct);
+    }
+
+    .feedback.incorrect {
+      color: var(--incorrect);
+    }
+
+    .results-message {
+      margin: 0 auto 22px;
+      max-width: 520px;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.5;
+    }
+
+    .perfect-title {
+      color: var(--accent);
+      text-shadow: 0 3px 0 rgba(243, 173, 34, 0.2);
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 0 auto 28px;
+      width: min(100%, 390px);
+    }
+
+    .score-card {
+      padding: 18px 12px;
+      border-radius: 16px;
+      font-weight: 800;
+    }
+
+    .score-card.correct-card {
+      background: var(--correct-soft);
+      color: var(--correct);
+    }
+
+    .score-card.incorrect-card {
+      background: var(--incorrect-soft);
+      color: var(--incorrect);
+    }
+
+    .score-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .review-section {
+      margin-top: 32px;
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+      text-align: left;
+    }
+
+    .review-section h3 {
+      text-align: center;
+    }
+
+    .review-list {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .review-item {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #ffffff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .review-item.correct-review {
+      border-color: #b8dfce;
+      background: var(--correct-soft);
+    }
+
+    .review-item.incorrect-review {
+      border-color: #efc3c8;
+      background: var(--incorrect-soft);
+    }
+
+    .review-number {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .review-problem {
+      font-weight: 850;
+    }
+
+    .review-answer {
+      font-size: 0.9rem;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .review-answer .given {
+      color: var(--incorrect);
+      text-decoration: line-through;
+    }
+
+    .review-answer .expected {
+      color: var(--correct);
+    }
+
+    .play-again {
+      width: min(100%, 280px);
+      margin-top: 28px;
+      font-size: 1.05rem;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      z-index: 20;
+      top: -24px;
+      width: 11px;
+      height: 18px;
+      border-radius: 2px;
+      pointer-events: none;
+      animation: confetti-fall var(--fall-time) linear forwards;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translate3d(0, -5vh, 0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(var(--drift), 110vh, 0) rotate(var(--spin));
+        opacity: 0.9;
+      }
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 12px;
+      }
+
+      main {
+        padding: 26px 18px;
+        border-radius: 22px;
+      }
+
+      form {
+        grid-template-columns: 1fr;
+      }
+
+      form button {
+        width: 100%;
+      }
+
+      .review-item {
+        grid-template-columns: 28px minmax(0, 1fr);
+      }
+
+      .review-answer {
+        grid-column: 2;
+        text-align: left;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section id="start-screen">
+      <p class="eyebrow">Quick practice</p>
+      <h1>Mental Math</h1>
+      <p class="hint">Answer 20 addition and subtraction questions. Your results are saved on this device.</p>
+      <button class="primary-button start-button" id="start-button" type="button">Start 20 Questions</button>
+
+      <div class="stats" id="saved-stats" hidden>
+        <div class="stat-card">
+          <span class="stat-value" id="best-score">0/20</span>
+          <span class="stat-label">High score</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value" id="attempt-count">0</span>
+          <span class="stat-label">Attempts</span>
+        </div>
+      </div>
+
+      <details class="history" id="history" hidden>
+        <summary>Previous attempts</summary>
+        <ol class="history-list" id="history-list"></ol>
+        <div class="history-actions">
+          <button class="secondary-button small-button" id="clear-history" type="button">Clear saved history</button>
+        </div>
+      </details>
+      <p class="save-note" id="save-note">Progress stays saved when you close this page.</p>
+    </section>
+
+    <section id="game-screen" hidden>
+      <div class="game-header">
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <p class="progress-text" id="progress-text">Question 1 of 20</p>
+      </div>
+
+      <p class="problem" id="problem" aria-label="Math problem"></p>
+
+      <form id="answer-form" autocomplete="off">
+        <input
+          id="answer"
+          name="answer"
+          type="text"
+          inputmode="numeric"
+          pattern="[+\-]?[0-9]+"
+          aria-label="Your answer"
+          placeholder="Your answer"
+          required
+        >
+        <button class="primary-button" id="action-button" type="submit">Check</button>
+      </form>
+
+      <p class="feedback" id="feedback" aria-live="polite"></p>
+    </section>
+
+    <section id="results-screen" hidden>
+      <p class="eyebrow">Round finished</p>
+      <h2 id="result-title">Round complete!</h2>
+      <p class="results-message" id="result-message"></p>
+
+      <div class="score-grid" aria-label="Round score">
+        <div class="score-card correct-card">
+          <span class="score-number" id="correct-count">0</span>
+          Correct
+        </div>
+        <div class="score-card incorrect-card">
+          <span class="score-number" id="wrong-count">0</span>
+          Wrong
+        </div>
+      </div>
+
+      <div class="review-section">
+        <h3>Your 20 answers</h3>
+        <ol class="review-list" id="review-list"></ol>
+      </div>
+
+      <button class="primary-button play-again" id="play-again" type="button">Start Again</button>
+    </section>
+  </main>
+
+  <script>
+    "use strict";
+
+    const QUESTION_COUNT = 20;
+    const STORAGE_KEY = "mentalMath20.attempts.v1";
+    const MAX_SAVED_ATTEMPTS = 200;
+
+    const startScreen = document.querySelector("#start-screen");
+    const gameScreen = document.querySelector("#game-screen");
+    const resultsScreen = document.querySelector("#results-screen");
+    const startButton = document.querySelector("#start-button");
+    const playAgainButton = document.querySelector("#play-again");
+    const problemElement = document.querySelector("#problem");
+    const form = document.querySelector("#answer-form");
+    const answerInput = document.querySelector("#answer");
+    const actionButton = document.querySelector("#action-button");
+    const feedbackElement = document.querySelector("#feedback");
+    const progressText = document.querySelector("#progress-text");
+    const progressBar = document.querySelector("#progress-bar");
+    const resultTitle = document.querySelector("#result-title");
+    const resultMessage = document.querySelector("#result-message");
+    const correctCount = document.querySelector("#correct-count");
+    const wrongCount = document.querySelector("#wrong-count");
+    const reviewList = document.querySelector("#review-list");
+    const savedStats = document.querySelector("#saved-stats");
+    const bestScore = document.querySelector("#best-score");
+    const attemptCount = document.querySelector("#attempt-count");
+    const historyElement = document.querySelector("#history");
+    const historyList = document.querySelector("#history-list");
+    const clearHistoryButton = document.querySelector("#clear-history");
+    const saveNote = document.querySelector("#save-note");
+
+    let questions = [];
+    let answers = [];
+    let currentQuestionIndex = 0;
+    let awaitingNextQuestion = false;
+    let attempts = loadAttempts();
+
+    function randomInteger(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function formatSecondNumber(number) {
+      return number < 0 ? `(${number})` : String(number);
+    }
+
+    function createQuestion() {
+      const first = randomInteger(-20, 20);
+      const second = randomInteger(-20, 20);
+      const operator = Math.random() < 0.5 ? "+" : "−";
+      const answer = operator === "+" ? first + second : first - second;
+
+      return {
+        first,
+        second,
+        operator,
+        answer,
+        key: `${first}|${operator}|${second}`,
+        display: `${first} ${operator} ${formatSecondNumber(second)}`
+      };
+    }
+
+    function createQuestionSet() {
+      const set = [];
+      const used = new Set();
+
+      while (set.length < QUESTION_COUNT) {
+        const question = createQuestion();
+        if (!used.has(question.key)) {
+          used.add(question.key);
+          set.push(question);
+        }
+      }
+
+      return set;
+    }
+
+    function loadAttempts() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        if (!Array.isArray(saved)) return [];
+
+        return saved.filter((attempt) =>
+          attempt &&
+          Number.isInteger(attempt.score) &&
+          attempt.score >= 0 &&
+          attempt.score <= QUESTION_COUNT
+        );
+      } catch (error) {
+        saveNoteUnavailable();
+        return [];
+      }
+    }
+
+    function saveAttempts() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(attempts.slice(0, MAX_SAVED_ATTEMPTS)));
+        return true;
+      } catch (error) {
+        saveNoteUnavailable();
+        return false;
+      }
+    }
+
+    function saveNoteUnavailable() {
+      window.setTimeout(() => {
+        saveNote.textContent = "This browser is blocking saved progress. The game still works, but history may not remain after closing.";
+        saveNote.className = "save-note warning";
+      }, 0);
+    }
+
+    function getBestScore() {
+      return attempts.reduce((best, attempt) => Math.max(best, attempt.score), 0);
+    }
+
+    function formatAttemptDate(timestamp) {
+      const date = new Date(timestamp);
+      if (Number.isNaN(date.getTime())) return "Previous round";
+
+      return date.toLocaleString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function renderSavedStats() {
+      const hasAttempts = attempts.length > 0;
+      savedStats.hidden = !hasAttempts;
+      historyElement.hidden = !hasAttempts;
+
+      if (!hasAttempts) {
+        historyList.replaceChildren();
+        return;
+      }
+
+      bestScore.textContent = `${getBestScore()}/${QUESTION_COUNT}`;
+      attemptCount.textContent = String(attempts.length);
+      historyList.replaceChildren();
+
+      attempts.forEach((attempt) => {
+        const item = document.createElement("li");
+        item.className = "history-item";
+
+        const date = document.createElement("span");
+        date.textContent = formatAttemptDate(attempt.completedAt);
+
+        const score = document.createElement("span");
+        score.className = "history-score";
+        score.textContent = `${attempt.score}/${QUESTION_COUNT}`;
+
+        item.append(date, score);
+        historyList.append(item);
+      });
+    }
+
+    function showScreen(screen) {
+      startScreen.hidden = screen !== "start";
+      gameScreen.hidden = screen !== "game";
+      resultsScreen.hidden = screen !== "results";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function startRound() {
+      questions = createQuestionSet();
+      answers = [];
+      currentQuestionIndex = 0;
+      awaitingNextQuestion = false;
+      showScreen("game");
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const question = questions[currentQuestionIndex];
+      const questionNumber = currentQuestionIndex + 1;
+
+      problemElement.textContent = `${question.display} = ?`;
+      progressText.textContent = `Question ${questionNumber} of ${QUESTION_COUNT}`;
+      progressBar.style.width = `${(questionNumber / QUESTION_COUNT) * 100}%`;
+      answerInput.value = "";
+      answerInput.disabled = false;
+      actionButton.textContent = "Check";
+      feedbackElement.textContent = "";
+      feedbackElement.className = "feedback";
+      awaitingNextQuestion = false;
+      answerInput.focus();
+    }
+
+    function checkAnswer() {
+      const question = questions[currentQuestionIndex];
+      const submittedAnswer = Number(answerInput.value.trim());
+      const isCorrect = submittedAnswer === question.answer;
+
+      answers.push({
+        problem: question.display,
+        correctAnswer: question.answer,
+        submittedAnswer,
+        isCorrect
+      });
+
+      feedbackElement.textContent = isCorrect
+        ? "Correct!"
+        : `Not quite — the answer is ${question.answer}.`;
+      feedbackElement.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
+      answerInput.disabled = true;
+      actionButton.textContent = currentQuestionIndex === QUESTION_COUNT - 1 ? "See Results" : "Next";
+      awaitingNextQuestion = true;
+      actionButton.focus();
+    }
+
+    function continueRound() {
+      if (currentQuestionIndex === QUESTION_COUNT - 1) {
+        finishRound();
+        return;
+      }
+
+      currentQuestionIndex += 1;
+      showQuestion();
+    }
+
+    function finishRound() {
+      const score = answers.filter((answer) => answer.isCorrect).length;
+      const hadPreviousAttempt = attempts.length > 0;
+      const previousBest = getBestScore();
+      const isNewHighScore = hadPreviousAttempt && score > previousBest;
+      const isPerfect = score === QUESTION_COUNT;
+
+      const attempt = {
+        score,
+        completedAt: new Date().toISOString(),
+        answers
+      };
+
+      attempts.unshift(attempt);
+      attempts = attempts.slice(0, MAX_SAVED_ATTEMPTS);
+      saveAttempts();
+      renderSavedStats();
+      renderResults(score, isNewHighScore, isPerfect);
+      showScreen("results");
+
+      if (isNewHighScore || isPerfect) {
+        launchConfetti();
+      }
+    }
+
+    function renderResults(score, isNewHighScore, isPerfect) {
+      resultTitle.className = isPerfect ? "perfect-title" : "";
+
+      if (isPerfect) {
+        resultTitle.textContent = "WOW! PERFECT SCORE!";
+        resultMessage.textContent = isNewHighScore
+          ? "Congratulations — 20 out of 20 is your new high score!"
+          : "Amazing work — you got every question right!";
+      } else if (isNewHighScore) {
+        resultTitle.textContent = "Congratulations! New high score!";
+        resultMessage.textContent = `You beat your previous best of ${getPreviousBestExcludingLatest()}/${QUESTION_COUNT}.`;
+      } else {
+        resultTitle.textContent = "Round complete!";
+        resultMessage.textContent = attempts.length === 1
+          ? "Your first score is saved. Play again and try to beat it!"
+          : `Your high score is ${getBestScore()}/${QUESTION_COUNT}. Keep practicing!`;
+      }
+
+      correctCount.textContent = String(score);
+      wrongCount.textContent = String(QUESTION_COUNT - score);
+      reviewList.replaceChildren();
+
+      answers.forEach((answer, index) => {
+        const item = document.createElement("li");
+        item.className = `review-item ${answer.isCorrect ? "correct-review" : "incorrect-review"}`;
+
+        const number = document.createElement("span");
+        number.className = "review-number";
+        number.textContent = `${index + 1}.`;
+
+        const problem = document.createElement("span");
+        problem.className = "review-problem";
+        problem.textContent = `${answer.problem} =`;
+
+        const answerText = document.createElement("span");
+        answerText.className = "review-answer";
+
+        if (answer.isCorrect) {
+          answerText.textContent = `✓ ${answer.correctAnswer}`;
+        } else {
+          const given = document.createElement("span");
+          given.className = "given";
+          given.textContent = String(answer.submittedAnswer);
+
+          const expected = document.createElement("span");
+          expected.className = "expected";
+          expected.textContent = ` → ${answer.correctAnswer}`;
+
+          answerText.append(given, expected);
+        }
+
+        item.append(number, problem, answerText);
+        reviewList.append(item);
+      });
+    }
+
+    function getPreviousBestExcludingLatest() {
+      return attempts.slice(1).reduce((best, attempt) => Math.max(best, attempt.score), 0);
+    }
+
+    function launchConfetti() {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const colors = ["#3157d5", "#f3ad22", "#ef476f", "#06b47a", "#8c5de8", "#22a6d5"];
+
+      for (let index = 0; index < 120; index += 1) {
+        const piece = document.createElement("span");
+        piece.className = "confetti-piece";
+        piece.style.left = `${Math.random() * 100}vw`;
+        piece.style.background = colors[index % colors.length];
+        piece.style.setProperty("--drift", `${randomInteger(-160, 160)}px`);
+        piece.style.setProperty("--spin", `${randomInteger(360, 1100)}deg`);
+        piece.style.setProperty("--fall-time", `${randomInteger(2600, 4800)}ms`);
+        piece.style.animationDelay = `${randomInteger(0, 700)}ms`;
+        piece.style.transform = `rotate(${randomInteger(0, 180)}deg)`;
+        document.body.append(piece);
+        window.setTimeout(() => piece.remove(), 5600);
+      }
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (awaitingNextQuestion) {
+        continueRound();
+      } else {
+        checkAnswer();
+      }
+    });
+
+    startButton.addEventListener("click", startRound);
+    playAgainButton.addEventListener("click", startRound);
+
+    clearHistoryButton.addEventListener("click", () => {
+      const shouldClear = window.confirm("Clear all saved scores and attempt history?");
+      if (!shouldClear) return;
+
+      attempts = [];
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (error) {
+        saveNoteUnavailable();
+      }
+      historyElement.open = false;
+      renderSavedStats();
+    });
+
+    renderSavedStats();
+  </script>
+</body>
+</html>
