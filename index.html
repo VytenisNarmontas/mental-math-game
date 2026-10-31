@@ -22,9 +22,7 @@
       --gold: #f3ad22;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       min-height: 100vh;
@@ -41,7 +39,7 @@
     main {
       position: relative;
       z-index: 1;
-      width: min(100%, 720px);
+      width: min(100%, 760px);
       padding: clamp(26px, 6vw, 50px);
       border: 1px solid rgba(23, 32, 54, 0.08);
       border-radius: 28px;
@@ -59,12 +57,7 @@
       text-transform: uppercase;
     }
 
-    h1,
-    h2,
-    h3,
-    p {
-      margin-top: 0;
-    }
+    h1, h2, h3, p { margin-top: 0; }
 
     h1 {
       margin-bottom: 0;
@@ -78,21 +71,102 @@
       letter-spacing: -0.035em;
     }
 
-    h3 {
-      margin-bottom: 14px;
-      font-size: 1.15rem;
-    }
+    h3 { margin-bottom: 14px; font-size: 1.15rem; }
 
     .hint {
-      margin: 10px 0 28px;
+      margin: 10px 0 24px;
       color: var(--muted);
       font-size: 1rem;
       line-height: 1.55;
     }
 
-    .primary-button,
-    .secondary-button,
-    input {
+    .mode-picker {
+      min-width: 0;
+      margin: 0 0 24px;
+      padding: 0;
+      border: 0;
+    }
+
+    .mode-picker legend {
+      width: 100%;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .mode-option {
+      position: relative;
+      min-width: 0;
+      cursor: pointer;
+    }
+
+    .mode-option input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mode-content {
+      display: flex;
+      min-height: 112px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 10px;
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+      transition: border-color 140ms ease, background 140ms ease, transform 100ms ease;
+    }
+
+    .mode-option:hover .mode-content {
+      border-color: #aebddd;
+      transform: translateY(-1px);
+    }
+
+    .mode-option input:checked + .mode-content {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: 0 0 0 3px rgba(49, 87, 213, 0.1);
+    }
+
+    .mode-option input:focus-visible + .mode-content {
+      outline: 4px solid rgba(49, 87, 213, 0.22);
+      outline-offset: 3px;
+    }
+
+    .mode-icon {
+      color: var(--accent);
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+
+    .mode-name {
+      margin-top: 5px;
+      font-size: 0.91rem;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .mode-description {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      line-height: 1.3;
+    }
+
+    .primary-button, .secondary-button, #answer {
       min-height: 58px;
       border-radius: 14px;
       font: inherit;
@@ -105,16 +179,12 @@
       transition: background 140ms ease, transform 100ms ease, box-shadow 140ms ease;
     }
 
-    button:focus-visible,
-    input:focus-visible,
-    summary:focus-visible {
+    button:focus-visible, #answer:focus-visible, summary:focus-visible {
       outline: 4px solid rgba(49, 87, 213, 0.22);
       outline-offset: 3px;
     }
 
-    button:active {
-      transform: translateY(1px);
-    }
+    button:active { transform: translateY(1px); }
 
     .primary-button {
       background: var(--accent);
@@ -123,29 +193,22 @@
       box-shadow: 0 9px 20px rgba(49, 87, 213, 0.2);
     }
 
-    .primary-button:hover {
-      background: var(--accent-dark);
-    }
+    .primary-button:hover { background: var(--accent-dark); }
 
     .secondary-button {
       min-height: 46px;
       padding: 0 18px;
       border: 2px solid var(--line);
+      border-radius: 14px;
       background: #ffffff;
       color: var(--ink);
     }
 
-    .secondary-button:hover {
-      border-color: #b7c2d7;
-      background: #f8faff;
-    }
+    .secondary-button:hover { border-color: #b7c2d7; background: #f8faff; }
 
-    .start-button {
-      width: min(100%, 260px);
-      font-size: 1.12rem;
-    }
+    .start-button { width: min(100%, 320px); font-size: 1.08rem; }
 
-    .stats {
+    .stats, .score-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
@@ -211,22 +274,9 @@
       font-size: 0.92rem;
     }
 
-    .history-score {
-      color: var(--ink);
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .history-actions {
-      margin-top: 14px;
-      text-align: center;
-    }
-
-    .small-button {
-      min-height: 38px;
-      padding: 0 14px;
-      font-size: 0.83rem;
-    }
+    .history-score { color: var(--ink); font-weight: 900; white-space: nowrap; }
+    .history-actions { margin-top: 14px; text-align: center; }
+    .small-button { min-height: 38px; padding: 0 14px; font-size: 0.83rem; }
 
     .save-note {
       min-height: 1.3em;
@@ -235,9 +285,17 @@
       font-size: 0.86rem;
     }
 
-    .save-note.warning {
-      color: var(--incorrect);
-      font-weight: 700;
+    .save-note.warning { color: var(--incorrect); font-weight: 700; }
+
+    .game-mode-label {
+      display: inline-block;
+      margin: 0 0 18px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 900;
     }
 
     .game-header {
@@ -245,7 +303,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 18px;
-      margin-bottom: 32px;
+      margin-bottom: 26px;
     }
 
     .progress-text {
@@ -282,13 +340,13 @@
       line-height: 1.1;
     }
 
-    form {
+    #answer-form {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 12px;
     }
 
-    input {
+    #answer {
       width: 100%;
       border: 2px solid var(--line);
       background: #ffffff;
@@ -301,14 +359,8 @@
       transition: border-color 140ms ease, box-shadow 140ms ease;
     }
 
-    input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(49, 87, 213, 0.13);
-    }
-
-    input:disabled {
-      opacity: 0.72;
-    }
+    #answer:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(49, 87, 213, 0.13); }
+    #answer:disabled { opacity: 0.72; }
 
     .feedback {
       min-height: 1.5em;
@@ -317,13 +369,8 @@
       font-weight: 800;
     }
 
-    .feedback.correct {
-      color: var(--correct);
-    }
-
-    .feedback.incorrect {
-      color: var(--incorrect);
-    }
+    .feedback.correct { color: var(--correct); }
+    .feedback.incorrect { color: var(--incorrect); }
 
     .results-message {
       margin: 0 auto 22px;
@@ -333,34 +380,12 @@
       line-height: 1.5;
     }
 
-    .perfect-title {
-      color: var(--accent);
-      text-shadow: 0 3px 0 rgba(243, 173, 34, 0.2);
-    }
+    .perfect-title { color: var(--accent); text-shadow: 0 3px 0 rgba(243, 173, 34, 0.2); }
+    .score-grid { margin-top: 0; margin-bottom: 28px; }
 
-    .score-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin: 0 auto 28px;
-      width: min(100%, 390px);
-    }
-
-    .score-card {
-      padding: 18px 12px;
-      border-radius: 16px;
-      font-weight: 800;
-    }
-
-    .score-card.correct-card {
-      background: var(--correct-soft);
-      color: var(--correct);
-    }
-
-    .score-card.incorrect-card {
-      background: var(--incorrect-soft);
-      color: var(--incorrect);
-    }
+    .score-card { padding: 18px 12px; border-radius: 16px; font-weight: 800; }
+    .score-card.correct-card { background: var(--correct-soft); color: var(--correct); }
+    .score-card.incorrect-card { background: var(--incorrect-soft); color: var(--incorrect); }
 
     .score-number {
       display: block;
@@ -376,9 +401,7 @@
       text-align: left;
     }
 
-    .review-section h3 {
-      text-align: center;
-    }
+    .review-section h3 { text-align: center; }
 
     .review-list {
       display: grid;
@@ -400,46 +423,22 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .review-item.correct-review {
-      border-color: #b8dfce;
-      background: var(--correct-soft);
-    }
-
-    .review-item.incorrect-review {
-      border-color: #efc3c8;
-      background: var(--incorrect-soft);
-    }
-
-    .review-number {
-      color: var(--muted);
-      font-size: 0.86rem;
-      font-weight: 800;
-    }
-
-    .review-problem {
-      font-weight: 850;
-    }
-
-    .review-answer {
-      font-size: 0.9rem;
-      font-weight: 800;
-      text-align: right;
-    }
-
-    .review-answer .given {
-      color: var(--incorrect);
-      text-decoration: line-through;
-    }
-
-    .review-answer .expected {
-      color: var(--correct);
-    }
-
-    .play-again {
-      width: min(100%, 280px);
+    .review-item.correct-review { border-color: #b8dfce; background: var(--correct-soft); }
+    .review-item.incorrect-review { border-color: #efc3c8; background: var(--incorrect-soft); }
+    .review-number { color: var(--muted); font-size: 0.86rem; font-weight: 800; }
+    .review-problem { font-weight: 850; }
+    .review-answer { font-size: 0.9rem; font-weight: 800; text-align: right; }
+    .review-answer .given { color: var(--incorrect); text-decoration: line-through; }
+    .review-answer .expected { color: var(--correct); }
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
       margin-top: 28px;
-      font-size: 1.05rem;
     }
+
+    .play-again { font-size: 1.05rem; }
 
     .confetti-piece {
       position: fixed;
@@ -453,52 +452,28 @@
     }
 
     @keyframes confetti-fall {
-      0% {
-        transform: translate3d(0, -5vh, 0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translate3d(var(--drift), 110vh, 0) rotate(var(--spin));
-        opacity: 0.9;
-      }
+      0% { transform: translate3d(0, -5vh, 0) rotate(0deg); opacity: 1; }
+      100% { transform: translate3d(var(--drift), 110vh, 0) rotate(var(--spin)); opacity: 0.9; }
     }
 
-    [hidden] {
-      display: none !important;
+    [hidden] { display: none !important; }
+
+    @media (max-width: 620px) {
+      .mode-grid { grid-template-columns: 1fr; }
+      .mode-content { min-height: 82px; }
     }
 
     @media (max-width: 520px) {
-      body {
-        padding: 12px;
-      }
-
-      main {
-        padding: 26px 18px;
-        border-radius: 22px;
-      }
-
-      form {
-        grid-template-columns: 1fr;
-      }
-
-      form button {
-        width: 100%;
-      }
-
-      .review-item {
-        grid-template-columns: 28px minmax(0, 1fr);
-      }
-
-      .review-answer {
-        grid-column: 2;
-        text-align: left;
-      }
+      body { padding: 12px; }
+      main { padding: 26px 18px; border-radius: 22px; }
+      #answer-form { grid-template-columns: 1fr; }
+      #answer-form button { width: 100%; }
+      .review-item { grid-template-columns: 28px minmax(0, 1fr); }
+      .review-answer { grid-column: 2; text-align: left; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         scroll-behavior: auto !important;
         transition: none !important;
         animation: none !important;
@@ -511,31 +486,63 @@
     <section id="start-screen">
       <p class="eyebrow">Quick practice</p>
       <h1>Mental Math</h1>
-      <p class="hint">Answer 20 addition and subtraction questions. Your results are saved on this device.</p>
-      <button class="primary-button start-button" id="start-button" type="button">Start 20 Questions</button>
+      <p class="hint">Choose a challenge, then answer 20 questions. Your results are saved on this device.</p>
+
+      <fieldset class="mode-picker">
+        <legend>Choose a game mode</legend>
+        <div class="mode-grid">
+          <label class="mode-option">
+            <input type="radio" name="game-mode" value="addSub" checked>
+            <span class="mode-content">
+              <span class="mode-icon">+ −</span>
+              <span class="mode-name">Add &amp; Subtract</span>
+              <span class="mode-description">Numbers from −20 to +20</span>
+            </span>
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="game-mode" value="mulDiv">
+            <span class="mode-content">
+              <span class="mode-icon">× ÷</span>
+              <span class="mode-name">Multiply &amp; Divide</span>
+              <span class="mode-description">Exact integer answers only</span>
+            </span>
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="game-mode" value="mixed">
+            <span class="mode-content">
+              <span class="mode-icon">+ − × ÷</span>
+              <span class="mode-name">Mixed Challenge</span>
+              <span class="mode-description">All four operations</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
+      <button class="primary-button start-button" id="start-button" type="button">Start Add &amp; Subtract</button>
 
       <div class="stats" id="saved-stats" hidden>
         <div class="stat-card">
           <span class="stat-value" id="best-score">0/20</span>
-          <span class="stat-label">High score</span>
+          <span class="stat-label">Mode high score</span>
         </div>
         <div class="stat-card">
           <span class="stat-value" id="attempt-count">0</span>
-          <span class="stat-label">Attempts</span>
+          <span class="stat-label">Mode attempts</span>
         </div>
       </div>
 
       <details class="history" id="history" hidden>
-        <summary>Previous attempts</summary>
+        <summary>Previous attempts in this mode</summary>
         <ol class="history-list" id="history-list"></ol>
         <div class="history-actions">
-          <button class="secondary-button small-button" id="clear-history" type="button">Clear saved history</button>
+          <button class="secondary-button small-button" id="clear-history" type="button">Clear all saved history</button>
         </div>
       </details>
       <p class="save-note" id="save-note">Progress stays saved when you close this page.</p>
     </section>
 
     <section id="game-screen" hidden>
+      <p class="game-mode-label" id="game-mode-label"></p>
       <div class="game-header">
         <div class="progress-track" aria-hidden="true">
           <div class="progress-bar" id="progress-bar"></div>
@@ -546,24 +553,15 @@
       <p class="problem" id="problem" aria-label="Math problem"></p>
 
       <form id="answer-form" autocomplete="off">
-        <input
-          id="answer"
-          name="answer"
-          type="text"
-          inputmode="numeric"
-          pattern="[+\-]?[0-9]+"
-          aria-label="Your answer"
-          placeholder="Your answer"
-          required
-        >
+        <input id="answer" name="answer" type="text" inputmode="numeric" pattern="[+\-]?[0-9]+"
+          aria-label="Your answer" placeholder="Your answer" required>
         <button class="primary-button" id="action-button" type="submit">Check</button>
       </form>
-
       <p class="feedback" id="feedback" aria-live="polite"></p>
     </section>
 
     <section id="results-screen" hidden>
-      <p class="eyebrow">Round finished</p>
+      <p class="eyebrow" id="result-mode-label">Round finished</p>
       <h2 id="result-title">Round complete!</h2>
       <p class="results-message" id="result-message"></p>
 
@@ -582,8 +580,10 @@
         <h3>Your 20 answers</h3>
         <ol class="review-list" id="review-list"></ol>
       </div>
-
-      <button class="primary-button play-again" id="play-again" type="button">Start Again</button>
+      <div class="result-actions">
+        <button class="primary-button play-again" id="play-again" type="button">Play This Mode Again</button>
+        <button class="secondary-button" id="change-mode" type="button">Choose Another Mode</button>
+      </div>
     </section>
   </main>
 
@@ -593,12 +593,21 @@
     const QUESTION_COUNT = 20;
     const STORAGE_KEY = "mentalMath20.attempts.v1";
     const MAX_SAVED_ATTEMPTS = 200;
+    const MODES = {
+      addSub: { name: "Add & Subtract", operations: ["add", "subtract"] },
+      mulDiv: { name: "Multiply & Divide", operations: ["multiply", "divide"] },
+      mixed: { name: "Mixed Challenge", operations: ["add", "subtract", "multiply", "divide"] }
+    };
 
     const startScreen = document.querySelector("#start-screen");
     const gameScreen = document.querySelector("#game-screen");
     const resultsScreen = document.querySelector("#results-screen");
     const startButton = document.querySelector("#start-button");
     const playAgainButton = document.querySelector("#play-again");
+    const changeModeButton = document.querySelector("#change-mode");
+    const modeInputs = [...document.querySelectorAll('input[name="game-mode"]')];
+    const gameModeLabel = document.querySelector("#game-mode-label");
+    const resultModeLabel = document.querySelector("#result-mode-label");
     const problemElement = document.querySelector("#problem");
     const form = document.querySelector("#answer-form");
     const answerInput = document.querySelector("#answer");
@@ -619,6 +628,8 @@
     const clearHistoryButton = document.querySelector("#clear-history");
     const saveNote = document.querySelector("#save-note");
 
+    let selectedMode = "addSub";
+    let currentRoundMode = "addSub";
     let questions = [];
     let answers = [];
     let currentQuestionIndex = 0;
@@ -629,36 +640,87 @@
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function formatSecondNumber(number) {
+    function randomNonZeroInteger(min, max) {
+      let number = 0;
+      while (number === 0) number = randomInteger(min, max);
+      return number;
+    }
+
+    function formatNumber(number) {
       return number < 0 ? `(${number})` : String(number);
     }
 
-    function createQuestion() {
-      const first = randomInteger(-20, 20);
-      const second = randomInteger(-20, 20);
-      const operator = Math.random() < 0.5 ? "+" : "−";
-      const answer = operator === "+" ? first + second : first - second;
+    function createQuestion(operation) {
+      let first;
+      let second;
+      let answer;
+      let symbol;
+
+      if (operation === "add" || operation === "subtract") {
+        first = randomInteger(-20, 20);
+        second = randomInteger(-20, 20);
+        symbol = operation === "add" ? "+" : "−";
+        answer = operation === "add" ? first + second : first - second;
+      } else if (operation === "multiply") {
+        first = randomInteger(-10, 10);
+        second = randomInteger(-10, 10);
+        symbol = "×";
+        answer = first * second;
+      } else {
+        answer = randomInteger(-10, 10);
+        second = randomNonZeroInteger(-10, 10);
+        first = answer * second;
+        symbol = "÷";
+      }
 
       return {
+        operation,
         first,
         second,
-        operator,
         answer,
-        key: `${first}|${operator}|${second}`,
-        display: `${first} ${operator} ${formatSecondNumber(second)}`
+        key: `${operation}|${first}|${second}`,
+        display: `${first} ${symbol} ${formatNumber(second)}`
       };
     }
 
-    function createQuestionSet() {
+    function createDoubleNegativeDivisionQuestion() {
+      const answer = randomInteger(1, 10);
+      const second = randomInteger(-10, -1);
+      const first = answer * second;
+
+      return {
+        operation: "divide",
+        first,
+        second,
+        answer,
+        key: `divide|${first}|${second}`,
+        display: `${first} ÷ ${formatNumber(second)}`
+      };
+    }
+
+    function createQuestionSet(mode) {
       const set = [];
       const used = new Set();
+      const operations = MODES[mode].operations;
+
+      if (operations.includes("divide")) {
+        const requiredDivision = createDoubleNegativeDivisionQuestion();
+        set.push(requiredDivision);
+        used.add(requiredDivision.key);
+      }
 
       while (set.length < QUESTION_COUNT) {
-        const question = createQuestion();
+        const operation = operations[randomInteger(0, operations.length - 1)];
+        const question = createQuestion(operation);
         if (!used.has(question.key)) {
           used.add(question.key);
           set.push(question);
         }
+      }
+
+      for (let index = set.length - 1; index > 0; index -= 1) {
+        const newIndex = randomInteger(0, index);
+        [set[index], set[newIndex]] = [set[newIndex], set[index]];
       }
 
       return set;
@@ -668,13 +730,9 @@
       try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
         if (!Array.isArray(saved)) return [];
-
-        return saved.filter((attempt) =>
-          attempt &&
-          Number.isInteger(attempt.score) &&
-          attempt.score >= 0 &&
-          attempt.score <= QUESTION_COUNT
-        );
+        return saved
+          .filter((attempt) => attempt && Number.isInteger(attempt.score) && attempt.score >= 0 && attempt.score <= QUESTION_COUNT)
+          .map((attempt) => ({ ...attempt, mode: MODES[attempt.mode] ? attempt.mode : "addSub" }));
       } catch (error) {
         saveNoteUnavailable();
         return [];
@@ -698,48 +756,46 @@
       }, 0);
     }
 
-    function getBestScore() {
-      return attempts.reduce((best, attempt) => Math.max(best, attempt.score), 0);
+    function getModeAttempts(mode) {
+      return attempts.filter((attempt) => attempt.mode === mode);
+    }
+
+    function getBestScore(mode) {
+      return getModeAttempts(mode).reduce((best, attempt) => Math.max(best, attempt.score), 0);
     }
 
     function formatAttemptDate(timestamp) {
       const date = new Date(timestamp);
       if (Number.isNaN(date.getTime())) return "Previous round";
-
       return date.toLocaleString(undefined, {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
+        year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
       });
     }
 
     function renderSavedStats() {
-      const hasAttempts = attempts.length > 0;
+      const modeAttempts = getModeAttempts(selectedMode);
+      const hasAttempts = modeAttempts.length > 0;
       savedStats.hidden = !hasAttempts;
       historyElement.hidden = !hasAttempts;
+      startButton.textContent = `Start ${MODES[selectedMode].name}`;
 
       if (!hasAttempts) {
         historyList.replaceChildren();
         return;
       }
 
-      bestScore.textContent = `${getBestScore()}/${QUESTION_COUNT}`;
-      attemptCount.textContent = String(attempts.length);
+      bestScore.textContent = `${getBestScore(selectedMode)}/${QUESTION_COUNT}`;
+      attemptCount.textContent = String(modeAttempts.length);
       historyList.replaceChildren();
 
-      attempts.forEach((attempt) => {
+      modeAttempts.forEach((attempt) => {
         const item = document.createElement("li");
         item.className = "history-item";
-
         const date = document.createElement("span");
         date.textContent = formatAttemptDate(attempt.completedAt);
-
         const score = document.createElement("span");
         score.className = "history-score";
         score.textContent = `${attempt.score}/${QUESTION_COUNT}`;
-
         item.append(date, score);
         historyList.append(item);
       });
@@ -753,10 +809,12 @@
     }
 
     function startRound() {
-      questions = createQuestionSet();
+      currentRoundMode = selectedMode;
+      questions = createQuestionSet(currentRoundMode);
       answers = [];
       currentQuestionIndex = 0;
       awaitingNextQuestion = false;
+      gameModeLabel.textContent = MODES[currentRoundMode].name;
       showScreen("game");
       showQuestion();
     }
@@ -764,7 +822,6 @@
     function showQuestion() {
       const question = questions[currentQuestionIndex];
       const questionNumber = currentQuestionIndex + 1;
-
       problemElement.textContent = `${question.display} = ?`;
       progressText.textContent = `Question ${questionNumber} of ${QUESTION_COUNT}`;
       progressBar.style.width = `${(questionNumber / QUESTION_COUNT) * 100}%`;
@@ -781,17 +838,14 @@
       const question = questions[currentQuestionIndex];
       const submittedAnswer = Number(answerInput.value.trim());
       const isCorrect = submittedAnswer === question.answer;
-
       answers.push({
+        operation: question.operation,
         problem: question.display,
         correctAnswer: question.answer,
         submittedAnswer,
         isCorrect
       });
-
-      feedbackElement.textContent = isCorrect
-        ? "Correct!"
-        : `Not quite — the answer is ${question.answer}.`;
+      feedbackElement.textContent = isCorrect ? "Correct!" : `Not quite — the answer is ${question.answer}.`;
       feedbackElement.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
       answerInput.disabled = true;
       actionButton.textContent = currentQuestionIndex === QUESTION_COUNT - 1 ? "See Results" : "Next";
@@ -804,52 +858,49 @@
         finishRound();
         return;
       }
-
       currentQuestionIndex += 1;
       showQuestion();
     }
 
     function finishRound() {
       const score = answers.filter((answer) => answer.isCorrect).length;
-      const hadPreviousAttempt = attempts.length > 0;
-      const previousBest = getBestScore();
-      const isNewHighScore = hadPreviousAttempt && score > previousBest;
+      const previousModeAttempts = getModeAttempts(currentRoundMode);
+      const previousBest = getBestScore(currentRoundMode);
+      const isNewHighScore = previousModeAttempts.length > 0 && score > previousBest;
       const isPerfect = score === QUESTION_COUNT;
 
-      const attempt = {
+      attempts.unshift({
+        mode: currentRoundMode,
         score,
         completedAt: new Date().toISOString(),
         answers
-      };
-
-      attempts.unshift(attempt);
+      });
       attempts = attempts.slice(0, MAX_SAVED_ATTEMPTS);
       saveAttempts();
       renderSavedStats();
-      renderResults(score, isNewHighScore, isPerfect);
+      renderResults(score, isNewHighScore, isPerfect, previousBest);
       showScreen("results");
-
-      if (isNewHighScore || isPerfect) {
-        launchConfetti();
-      }
+      if (isNewHighScore || isPerfect) launchConfetti();
     }
 
-    function renderResults(score, isNewHighScore, isPerfect) {
+    function renderResults(score, isNewHighScore, isPerfect, previousBest) {
+      resultModeLabel.textContent = MODES[currentRoundMode].name;
       resultTitle.className = isPerfect ? "perfect-title" : "";
 
       if (isPerfect) {
         resultTitle.textContent = "WOW! PERFECT SCORE!";
         resultMessage.textContent = isNewHighScore
-          ? "Congratulations — 20 out of 20 is your new high score!"
+          ? "Congratulations — 20 out of 20 is your new high score in this mode!"
           : "Amazing work — you got every question right!";
       } else if (isNewHighScore) {
         resultTitle.textContent = "Congratulations! New high score!";
-        resultMessage.textContent = `You beat your previous best of ${getPreviousBestExcludingLatest()}/${QUESTION_COUNT}.`;
+        resultMessage.textContent = `You beat your previous best of ${previousBest}/${QUESTION_COUNT} in this mode.`;
       } else {
         resultTitle.textContent = "Round complete!";
-        resultMessage.textContent = attempts.length === 1
-          ? "Your first score is saved. Play again and try to beat it!"
-          : `Your high score is ${getBestScore()}/${QUESTION_COUNT}. Keep practicing!`;
+        const modeAttemptCount = getModeAttempts(currentRoundMode).length;
+        resultMessage.textContent = modeAttemptCount === 1
+          ? "Your first score in this mode is saved. Play again and try to beat it!"
+          : `Your high score in this mode is ${getBestScore(currentRoundMode)}/${QUESTION_COUNT}. Keep practicing!`;
       }
 
       correctCount.textContent = String(score);
@@ -859,15 +910,12 @@
       answers.forEach((answer, index) => {
         const item = document.createElement("li");
         item.className = `review-item ${answer.isCorrect ? "correct-review" : "incorrect-review"}`;
-
         const number = document.createElement("span");
         number.className = "review-number";
         number.textContent = `${index + 1}.`;
-
         const problem = document.createElement("span");
         problem.className = "review-problem";
         problem.textContent = `${answer.problem} =`;
-
         const answerText = document.createElement("span");
         answerText.className = "review-answer";
 
@@ -877,28 +925,19 @@
           const given = document.createElement("span");
           given.className = "given";
           given.textContent = String(answer.submittedAnswer);
-
           const expected = document.createElement("span");
           expected.className = "expected";
           expected.textContent = ` → ${answer.correctAnswer}`;
-
           answerText.append(given, expected);
         }
-
         item.append(number, problem, answerText);
         reviewList.append(item);
       });
     }
 
-    function getPreviousBestExcludingLatest() {
-      return attempts.slice(1).reduce((best, attempt) => Math.max(best, attempt.score), 0);
-    }
-
     function launchConfetti() {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
       const colors = ["#3157d5", "#f3ad22", "#ef476f", "#06b47a", "#8c5de8", "#22a6d5"];
-
       for (let index = 0; index < 120; index += 1) {
         const piece = document.createElement("span");
         piece.className = "confetti-piece";
@@ -908,7 +947,6 @@
         piece.style.setProperty("--spin", `${randomInteger(360, 1100)}deg`);
         piece.style.setProperty("--fall-time", `${randomInteger(2600, 4800)}ms`);
         piece.style.animationDelay = `${randomInteger(0, 700)}ms`;
-        piece.style.transform = `rotate(${randomInteger(0, 180)}deg)`;
         document.body.append(piece);
         window.setTimeout(() => piece.remove(), 5600);
       }
@@ -916,27 +954,31 @@
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
+      if (awaitingNextQuestion) continueRound();
+      else checkAnswer();
+    });
 
-      if (awaitingNextQuestion) {
-        continueRound();
-      } else {
-        checkAnswer();
-      }
+    modeInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        if (!input.checked) return;
+        selectedMode = input.value;
+        renderSavedStats();
+      });
     });
 
     startButton.addEventListener("click", startRound);
     playAgainButton.addEventListener("click", startRound);
+    changeModeButton.addEventListener("click", () => {
+      renderSavedStats();
+      showScreen("start");
+    });
 
     clearHistoryButton.addEventListener("click", () => {
-      const shouldClear = window.confirm("Clear all saved scores and attempt history?");
+      const shouldClear = window.confirm("Clear all saved scores and attempt history for every mode?");
       if (!shouldClear) return;
-
       attempts = [];
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch (error) {
-        saveNoteUnavailable();
-      }
+      try { localStorage.removeItem(STORAGE_KEY); }
+      catch (error) { saveNoteUnavailable(); }
       historyElement.open = false;
       renderSavedStats();
     });
